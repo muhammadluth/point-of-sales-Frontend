@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import './App.css'
+import SignIn from './Auth/SignIn'
+import SignUp from './Auth/SignUp'
+import IndexHome from './Screens/IndexHome'
+import ListProduct from './Component/ListProduct'
+import AddProduct from './Component/AddProduct'
+import Carts from './Component/Carts'
+import Headers from './Screens/Headers'
+import Bodys from './Screens/Bodys'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render () {
+    return (
+        <Router>
+          <Route exact path='/' component={SignIn} />
+          <Route exact path='/home' component={Headers} />
+          <Route excat path='/post' component={AddProduct} />
+          <Route excat path='/SignUp' component={SignUp} />
+          {/* <Route exact path='/SignIn' component={SignIn} /> */}
+          {/* <Route excat path='/SignUp' component={SignUp} />
+          <Route path='/get' component={ListProduct} />
+          <Route excat path='/post' component={AddProduct} />
+          <Route path='/carts' component={Carts} /> */}
+        </Router>
+    );
+  }
 }
 
-export default App;
+export default App

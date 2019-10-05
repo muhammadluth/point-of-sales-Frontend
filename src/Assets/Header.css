@@ -1,0 +1,30 @@
+#header .trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 32px;
+  cursor: pointer;
+  transition: color 0.3s;
+  color: #fff;
+}
+
+#header .trigger:hover {
+  /* color: #1890ff; */
+  color: #fff
+}
+div.fixed {
+  position: fixed;
+  height: 100%;
+}
+/* food-and-restaurant */
+
+.carts {
+  position: absolute;
+width: 200px;
+height: 200px;
+left: 1115px;
+top: 167px;
+}
+.relative {
+  position: relative;
+  top: 100px;
+}
