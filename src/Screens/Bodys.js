@@ -1,84 +1,47 @@
 import React, { Component } from "react";
 import {
-  Dropdown,
   Badge,
-  Icon,
+  Select,
   Layout,
-  Menu,
   Button,
   Row,
   Col,
   Input,
-  Select,
-  Typography,
-  Modal,
-  Form,
-  Pagination,
-  Upload,
-  message
+  Pagination
 } from "antd";
 import "../Assets/Header.css";
-import ListProduct from "../Component/ListProduct";
+import "../Component/ListProduct";
 import Carts from "../Component/Carts";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import AddProduct from "../Component/AddProduct";
 import ConvertRupiah from "rupiah-format";
+import ListProduct from "../Component/ListProduct";
+import { connect } from "react-redux";
+import { getMenu } from "../Public/Redux/Actions/Menu";
 
-const { Header, Sider, Content } = Layout;
+const { Content } = Layout;
 const { Search } = Input;
-const { Text } = Typography;
 const { Option } = Select;
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 5 }
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 12 }
-  }
-};
 
-const props = {
-  name: 'file',
-  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  headers: {
-    authorization: 'authorization-text',
-  },
-  onChange(info) {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-};
-function showTotal(total) {
-  return `Total ${total} items`;
-}
 class Bodys extends React.Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       data: [],
       cart: [],
+      search: "",
+      sort: "",
       total: 0,
-      limit: '6',
-      page: '1',
-      allPage: []
+      limit: "3",
+      page: "1",
+      allPage: [],
+      visible: false
     };
     this.calculateTotal = this.calculateTotal.bind(this);
     this.handleCart = this.handleCart.bind(this);
   }
-
-  state = {
-    ModalText: "Content of the modal",
-    visible: false,
-    confirmLoading: false
+  showCheckout = () => {
+    this.setState({
+      visible: true
+    });
   };
 
   showModal = () => {
@@ -86,31 +49,11 @@ class Bodys extends React.Component {
       visible: true
     });
   };
-
-  handleOk = () => {
+  setCount = count => {
     this.setState({
-      ModalText: "The modal will be closed after two seconds",
-      confirmLoading: true
+      count: count
     });
-    setTimeout(() => {
-      this.setState({
-        visible: false,
-        confirmLoading: false
-      });
-    }, 2000);
   };
-  handleSubmit(e) {
-    console.log(e);
-    // alert(e.target)
-    e.preventDefault();
-    const data = new FormData(e.target);
-
-    fetch("http://localhost:3500/api/v1/product/", {
-      method: "POST",
-      body: data
-    });
-    window.location.href = "http://localhost:3000/";
-  }
 
   handleCancel = () => {
     console.log("Clicked cancel button");
@@ -120,7 +63,7 @@ class Bodys extends React.Component {
   };
 
   componentDidMount() {
-    this.getAll();
+    this.fetchData();
   }
 
   calculateTotal(price) {
@@ -128,15 +71,15 @@ class Bodys extends React.Component {
     this.setState({
       total: this.state.total + price
     });
-    this.props.handleCount(this.state.cart.length);
+    this.state.handleCount(this.state.cart.length);
   }
 
-  handleCart(result) {
+  handleCart(event, result) {
     this.setState(state => {
       const cart = state.cart;
       let inCart = false;
       cart.forEach(item => {
-        if (item.name === result.name) {
+        if (item.id === result.id) {
           inCart = true;
           item.qty += 1;
         }
@@ -144,6 +87,7 @@ class Bodys extends React.Component {
       if (!inCart) {
         cart.push({ ...result, qty: 1 });
       }
+      localStorage.setItem("cart", JSON.stringify(cart));
       return cart;
     });
   }
@@ -154,117 +98,76 @@ class Bodys extends React.Component {
     this.setState({ cart: state });
   }
 
-  getAll = async () => {
-    await axios
-      .get("http://localhost:3500/api/v1/product/")
-      .then(result => {
-        console.log(result.data.data);
-        this.setState({ data: result.data.data });
+  async fetchData() {
+    await this.props.dispatch(
+      getMenu({
+        search: this.state.search,
+        sort: this.state.sort
       })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-  
-  
-  page = async () => {
-    const { limit, page} = this.state
-    await axios
-      .get(`http://localhost:3500/api/v1/product?limit=${limit}&${page}`)
-      .then(result => {
-        console.log(result.data.data);
-        let page = []
-        this.setState({ data: result.data.data });
-        const currentAllpage = Math.ceil(result.data.allData / this.state.limit)
-
-        for(let i=0;i < currentAllpage;i++){
-          page.push(i+1)
-        }
-        this.setState({allPage:page})
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
-  pageChange = async (page) => {
-    await this.setState({page:page})
-    this.getAll()
+    );
+    console.log(this.props.data.menuList);
+    this.setState({ data: this.props.data.menuList });
   }
 
-  SortBy = async value => {
-    let sortBy;
-    if (value == 1) sortBy = "name";
-    if (value == 2) sortBy = "category";
-    if (value == 3) sortBy = "price";
-    await axios
-      .get("http://localhost:3500/api/v1/product?sort=" + sortBy)
-      .then(result => {
-        console.log(result.data.data);
-        this.setState({ data: result.data.data });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  // page = async () => {
+  //   const { limit, page } = this.state;
+  //   await axios
+  //     .get(`http://localhost:3500/api/v1/product?limit=${limit}&${page}`)
+  //     .then(result => {
+  //       console.log(result.data.data);
+  //       let page = [];
+  //       this.setState({ data: result.data.data });
+  //       const currentAllpage = Math.ceil(
+  //         result.data.allData / this.state.limit
+  //       );
+
+  //       for (let i = 0; i < currentAllpage; i++) {
+  //         page.push(i + 1);
+  //       }
+  //       this.setState({ allPage: page });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // };
+
+  // pageChange = async page => {
+  //   await this.setState({ page: page });
+  //   this.getAll();
+  // };
+
+  getSearch = async event => {
+    let search = event.target.value;
+    console.log(search);
+    await this.setState({ search });
+    return this.fetchData(search, this.state.sort);
   };
 
-  Search = async value => {
-    await axios
-      .get("http://localhost:3500/api/v1/product?search=" + value)
-      .then(result => {
-        console.log(result.data.data);
-        this.setState({ data: result.data.data });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
-  menu = (
-    <Menu>
-      <Menu.Item key="1" onClick={() => this.SortBy(1)}>
-        By Name
-      </Menu.Item>
-      <Menu.Item key="2" onClick={() => this.SortBy(2)}>
-        By Category
-      </Menu.Item>
-      <Menu.Item key="3" onClick={() => this.SortBy(3)}>
-        By Price
-      </Menu.Item>
-    </Menu>
-  );
-
-  Register = async () => {
-    await axios
-      .post("http://localhost:3500/api/v1/users/register")
-      .then(result => {
-        console.log(result.data.data);
-        this.setState({ data: result.data.data });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  getSort = async value => {
+    let sort = value;
+    await this.setState({ sort });
+    return this.fetchData(sort, this.state.search);
   };
 
   totalPrice() {
-    let total = 0
-    this.state.cart.forEach((val,key) => {
-      total += val.price
-    })
-    return (<b>{ConvertRupiah.convert(total)}</b>)
+    let total = 0;
+    this.state.cart.forEach((val, key) => {
+      total += val.price;
+    });
+    return <b>{ConvertRupiah.convert(total)}</b>;
   }
 
-  cancel = (e) => {
-    e.preventDefault()
-    if(window.confirm('BACOT'))
-    {
+  cancel = e => {
+    e.preventDefault();
+    if (window.confirm("Canceled")) {
       this.setState({
-        cart:[]
-      })
+        cart: []
+      });
     }
-  }
+  };
 
   render() {
+    console.log(this.state.cart);
     const { visible, confirmLoading, ModalText } = this.state;
     return (
       <Content
@@ -277,152 +180,72 @@ class Bodys extends React.Component {
         <Row>
           <Col span={2}>
             <div style={{ textAlign: "left", marginLeft: "10px" }}>
-              <Dropdown overlay={this.menu}>
-                <Button>
-                  Filter
-                  <Icon type="down" />
-                </Button>
-              </Dropdown>
-            </div>
-          </Col>
-          <Col span={10}>
-            <div style={{ textAlign: "left" }}>
-              <Button type="primary" onClick={this.showModal}>
-                <Icon type="plus" /> Add Product
-              </Button>
-              <Modal
-                title="Add Product"
-                visible={visible}
-                onSubmit={this.handleSubmit}
-                confirmLoading={confirmLoading}
-                onCancel={this.handleCancel}
+              <Select
+                defaultValue="name"
+                style={{ width: 120 }}
+                onChange={this.getSort}
               >
-                <Form {...formItemLayout}>
-                  <Form.Item label="Name" hasFeedback validateStatus="success">
-                    <Input placeholder="I'm the content" name="name" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Description"
-                    hasFeedback
-                    validateStatus="success"
-                  >
-                    <Input placeholder="I'm the content" name="category" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Upload Image">
-                  <Upload {...props}>
-                  <Button>
-                   <Icon type="upload"/> Click to Upload
-                  </Button>
-                 </Upload>
-                 </Form.Item>
-
-                  <Form.Item
-                    label="Category"
-                    hasFeedback
-                    validateStatus="success"
-                  >
-                    <Select defaultValue="1">
-                      <Option value="1">9</Option>
-                      <Option value="2">10</Option>
-                      <Option value="3">11</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item label="Price" hasFeedback validateStatus="success">
-                    <Input placeholder="I'm the content" name="price" />
-                  </Form.Item>
-                  <Form.Item label="Quantity" hasFeedback validateStatus="success">
-                    <Input placeholder="I'm the content" name="price" />
-                  </Form.Item>
-                </Form>
-              </Modal>
+                <Option value="name">Name</Option>
+                <Option value="price">Price</Option>
+                <Option value="created_at">Latest</Option>
+              </Select>
             </div>
           </Col>
-          <Col span={12}>
+
+          <Col span={22}>
             <Search
               placeholder="input search text"
-              onSearch={value => this.Search(value)}
+              onChange={event => this.getSearch(event)}
               enterButton
               style={{
                 textAlign: "right",
-                marginLeft: "55px",
+                marginLeft: "50%",
                 width: 220
               }}
             />
           </Col>
           <Col span={18}>
             <Row>
-              {/* products */}
-              {this.state.data.map((item, index) => {
-                return (
-                  <Col span={8} style={{ padding: "8px" }}>
-                    <ListProduct
-                      key={index}
-                      id={item.id}
-                      name={item.name}
-                      category={item.category}
-                      description={item.description}
-                      price={item.price}
-                      image={item.image}
-                      handleCart={this.handleCart}
-                      handleTotal={this.calculateTotal}
-                    />
-                  </Col>
-                );
-              })}
+              <ListProduct
+                product={this.state.data}
+                handleCart={this.handleCart}
+              />
             </Row>
-            {/* <Pagination>
-              {
-                this.state.allPage.map(item => (
-                  <PaginationItem key={item}>
-                    <PaginationLink onClick={() => this.pageChange(item)}>
-                      {item}
-
-                    </PaginationLink>
-                  </PaginationItem>
-                ))
-              }
-            </Pagination> */}
-            {/* <Pagination size="small" total={this.page} /> */}
+            <Pagination
+              style={{ textAlign: "center" }}
+              size="small"
+              total={this.state.page}
+              onClick={() => this.pageChange(this.page.bind(this))}
+            />
           </Col>
 
           <Col span={6}>
-            {/* products */}
-            {this.state.cart.map((item, index) => {
-              return (
-                <Col span={24} style={{ padding: "8px" }}>
-                  <Carts
-                    key={index}
-                    id={item.id}
-                    name={item.name}
-                    category={item.category}
-                    description={item.description}
-                    price={item.price}
-                    image={item.image}
-                    handleCart={this.handleCart}
-                    handleTotal={this.calculateTotal}
-                    handleRemove={this.removeCart}
-                  />
-                </Col>
-              );
-            })}
+            <p
+              style={{
+                fontSize: "30px",
+                textAlign: "center",
+                fontWeight: 900,
+                color: "#000"
+              }}
+            >
+              CARTS
+              <Badge
+                count={this.state.qty}
+                showZero
+                style={{ fontSize: "20px", color: "#000" }}
+              ></Badge>
+            </p>
+            <Row>
+              <Carts cart={this.state.cart} />
+            </Row>
+
             <div>
-              <Text>TOTAL : {ConvertRupiah.convert(this.state.total)}</Text>
-              <p>*Belum termasuk PPN</p>
-              <Button type="primary" block onClick={this.showModal}>
-                CHECKOUT
-              </Button>
-              <Modal
-                title="Basic Modal"
-                visible={this.state.visibleC}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
+              <Button
+                type="danger"
+                block
+                style={{ marginTop: "5px" }}
+                onClick={this.cancel}
               >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-              </Modal>
-              <Button type="danger" block style={{ marginTop: "5px" }} onClick={this.cancel}>
                 CANCEL
               </Button>
             </div>
@@ -433,4 +256,10 @@ class Bodys extends React.Component {
   }
 }
 
-export default Bodys;
+const mapStateToProps = state => {
+  return {
+    data: state.menuList
+  };
+};
+
+export default connect(mapStateToProps)(Bodys);

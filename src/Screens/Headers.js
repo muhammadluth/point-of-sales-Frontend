@@ -1,24 +1,13 @@
 import React, { Component } from "react";
-import {
-  Badge,
-  Icon,
-  Layout,
-  Menu,
-  Row,
-  Col,
-  Typography,
-} from "antd";
+import { Badge, Icon, Layout, Menu, Row, Col, Typography } from "antd";
 import "../Assets/Header.css";
 import { Link } from "react-router-dom";
-import Bodys from './Bodys'
-import AddProduct from '../Component/AddProduct'
-
-
+import Bodys from "./Bodys";
+import AddProduct from "../Component/AddProduct";
 
 const { Header, Sider, Content } = Layout;
 
 class Headers extends React.Component {
-
   state = {
     collapsed: false,
     count: 0
@@ -31,13 +20,11 @@ class Headers extends React.Component {
   };
   state;
 
-  setCount = (count) => {
-    this.setState({
-      count : count
-    })
-
+  handleLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    window.location.href = "http://localhost:3000/";
   }
-  
 
   render() {
     const { Title } = Typography;
@@ -50,27 +37,35 @@ class Headers extends React.Component {
               type={this.state.collapsed ? "menu-unfold" : "menu-fold"}
               onClick={this.toggle}
             />
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+            <Menu theme="dark" mode="inline">
               <Menu.Item key="1">
                 <Icon type="home" />
                 <span>
-                <Link to={"/"} style={{ color: "#fff" }}>
+                  <Link to={"/dashboard"} style={{ color: "#fff" }}>
                     Home
-                </Link>
+                  </Link>
                 </span>
               </Menu.Item>
               <Menu.Item key="2">
                 <Icon type="history" />
-                <span>History</span>
-              </Menu.Item>
-              {/* <Menu.Item key="3">
-                <Icon type="user" />
                 <span>
-                  <Link to={"/SignIn"} style={{ color: "#fff" }}>
-                    SignIn or SignUp
+                  <Link to={"/history"} style={{ color: "#fff" }}>
+                    History
                   </Link>
                 </span>
-              </Menu.Item> */}
+              </Menu.Item>
+              <Menu.Item key="3">
+                <Icon type="plus" />
+                <span>
+                  <Link to={"/adddata"} style={{ color: "#fff" }}>
+                    Manage Data
+                  </Link>
+                </span>
+              </Menu.Item>
+              <Menu.Item key="4" onClick={() => this.handleLogout()}>
+                <Icon type="logout" />
+                <span>Logout</span>
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout>
@@ -79,26 +74,22 @@ class Headers extends React.Component {
             >
               <Row>
                 <Col span={18}>
-                </Col>
-                <Col span={6}>
-                  <p
-                    style={{
-                      fontSize: "30px",
-                      textAlign: "center",
-                      fontWeight: 900,
-                      color: "#fff"
-                    }}
-                  >
-                    CARTS
-                    <Badge count={this.state.count} showZero style={{ fontSize: "20px" }}>
-                      <a href="#" className="head-example" />
-                    </Badge>
-                  </p>
+                  <div>
+                    <p
+                      style={{
+                        fontSize: "30px",
+                        fontWeight: 900,
+                        marginRight: "250px",
+                        color: "#fff"
+                      }}
+                    >
+                      FOOD GATHERING
+                    </p>
+                  </div>
                 </Col>
               </Row>
             </Header>
-            <Bodys 
-            handleCount ={this.setCount} />
+            <Bodys handleCount={this.setCount} />
           </Layout>
         </Layout>
       </div>
@@ -106,4 +97,4 @@ class Headers extends React.Component {
   }
 }
 
-export default Headers
+export default Headers;

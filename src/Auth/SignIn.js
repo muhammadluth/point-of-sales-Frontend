@@ -1,92 +1,132 @@
-
 import React from "react";
-import storage from 'local-storage'
-import Axios from 'axios'
-import { Redirect } from 'react-router-dom'
-import {
-  FormGroup,
-  Form,
-  Input,
-  Button,
-  Row,
-  Col
-} from "reactstrap";
+import Axios from "axios";
+import { Form, Input, Button, Row, Col, Typography } from "antd";
+
+const { Text } = Typography;
 
 class SignIn extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      id: null,
-      email:'',
-      password: '',
-      token: ''
-    }
+      email: "",
+      password: ""
+    };
+    this.handleLogin = this.handleLogin.bind(this);
   }
 
   setEmail(e) {
-    let value = e.target.value
-    this.setState({email: value})
+    const value = e.target.value;
+    this.setState({ email: value });
   }
-  setPassword(e) {
-    let value = e.target.value
-    this.setState({password: value})
-  }
-  
-  SignIn(data){
-    return new Promise((resolve, reject) => {
-      Axios.post('http://localhost:3500/api/v1/users/login', data)
-      .then((res) => {
-        storage.set('token', res.data.token)
-        console.log(storage.get.token)
 
-        resolve()
-        window.location.href = '/home'
-      }).catch((err) => {
-        console.log(err.response.data.message)
-        alert(err.response.data.message)
-      })
+  setPassword(e) {
+    const value = e.target.value;
+    this.setState({ password: value });
+  }
+
+  // SignIn(data) {
+  //   return new Promise((resolve, reject) => {
+  //     console.log(data);
+  //     Axios.post("http://localhost:3500/api/v1/users/login", data)
+  //       .then(res => {
+  //         console.log(res);
+  //         // localStorage.set("token", res.data.token);
+  //         // localStorage.set("username", res.data.token);
+  //         localStorage.setItem("token", `Bearer ${res.data.token}`);
+  //         console.log(localStorage.get.token);
+
+  //         resolve();
+  //         window.location.href = "/dashboard";
+  //       })
+  //       .catch(err => {
+  //         console.log(err.res);
+  //         alert(err.res);
+  //       });
+  //   });
+  // }
+  handleLogin() {
+    const emails = this.state.email;
+    const passwords = this.state.password;
+
+    Axios.post("http://localhost:3500/api/v1/users/login", {
+      email: emails,
+      password: passwords
     })
+      .then(res => {
+        console.log(res.data);
+        if (res.data.success === 200) {
+          localStorage.setItem("user", `${res.data.username}`);
+          // localStorage.setItem("expire_at", expire_at);
+          localStorage.setItem("token", `Bearer: ${res.data.token}`);
+          window.location.href = "http://localhost:3000/dashboard";
+          alert("Masuk");
+        } else {
+          window.location.href = "http://localhost:3000/";
+          alert("Gagal");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        alert("username or password incorect");
+      });
   }
 
   render() {
     return (
-      <>
-        <Form style={{textAlign:'center'}}>
+      <div>
+        <Form style={{ textAlign: "center" }}>
           <Row>
-            <Col md="6">
-              <FormGroup>
+            <Col span={9} />
+            <Col span={6}>
+              <Text style={{ fontSize: "24px", fontWeight: 900 }}>LOGIN</Text>
+              <Form onSubmit={this.handleLogin}>
                 <Input
                   name="email"
-                  onChange={(e) => this.setEmail(e)}
+                  onChange={e => this.setEmail(e)}
                   placeholder="Email"
                   type="email"
                 />
-              </FormGroup>
+              </Form>
             </Col>
+            <Col span={9} />
           </Row>
           <Row>
-            <Col md="6">
-            <FormGroup>
+            <Col span={9} />
+            <Col span={6}>
+              <Form>
                 <Input
-                name="password"
+                  name="password"
                   placeholder="password"
-                  onChange={(e) => this.setPassword(e)}
+                  onChange={e => this.setPassword(e)}
                   type="password"
                 />
-              </FormGroup>
+              </Form>
             </Col>
+            <Col span={9} />
           </Row>
           <Row>
-            <Col md="6">
-            <FormGroup>
+            <Col span={9} />
+            <Col span={6}>
+              <Form>
                 <Button
-                  onClick={() => this.SignIn({email : this.state.email, password : this.state.password})}
-                  >Submit</Button>
-              </FormGroup>
+                  type="primary"
+                  style={{ marginTop: "5px" }}
+                  onClick={() =>
+                    this.handleLogin({
+                      email: this.state.email,
+                      password: this.state.password
+                    })
+                  }
+                >
+                  Submit
+                </Button>
+                {/* <Link to={"/SignUp"}>SignUp</Link> */}
+              </Form>
             </Col>
+            <Col span={9} />
           </Row>
         </Form>
-      </>
+      </div>
     );
   }
 }

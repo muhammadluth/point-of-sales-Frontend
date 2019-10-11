@@ -9,7 +9,7 @@
 
 #header .trigger:hover {
   /* color: #1890ff; */
-  color: #fff
+  color: #fff;
 }
 div.fixed {
   position: fixed;
@@ -19,10 +19,10 @@ div.fixed {
 
 .carts {
   position: absolute;
-width: 200px;
-height: 200px;
-left: 1115px;
-top: 167px;
+  width: 200px;
+  height: 200px;
+  left: 1115px;
+  top: 167px;
 }
 .relative {
   position: relative;
