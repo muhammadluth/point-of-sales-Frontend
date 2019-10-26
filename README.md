@@ -80,7 +80,7 @@ $ npm start
 $ npm build
 ```
 
-## Capture
+<!-- ## Capture
 
 ### Home
 
@@ -90,7 +90,7 @@ $ npm build
 
 [![View Checkout](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/checkout.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/checkout.png)
 
-### CRUD Product
+### ADD Product
 
 [![View CRUD product](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/crud-product.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/crud-product.png)
 
@@ -108,8 +108,8 @@ $ npm build
 
 ### Statistic Income and Orders
 
-[![View CRUD product](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/statistic.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/statistic.png)
+[![View CRUD product](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/statistic.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/statistic.png) -->
 
 ---
 
-Copyright © 2019 by Sutan Gading Fadhillah Nasution
+Copyright © 2019 by Muhammad Luthfi
