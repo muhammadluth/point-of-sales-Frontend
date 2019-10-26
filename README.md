@@ -1,68 +1,115 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Point of Sales Frontend Web Application
 
-## Available Scripts
+> Point of Sales Frontend Web Application
 
-In the project directory, you can run:
+<p align="center">
+  <a href="https://reactjs.org/">
+    <img title="React Redux" src="https://miro.medium.com/max/800/1*bs6W6c6yYS36PcD9joLVtw.png">
+  </a>
+</p>
 
-### `npm start`
+---
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Table of contents
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- [Point of Sales Frontend Web Application](#point-of-sales-frontend-web-application)
+  - [Table of contents](#table-of-contents)
+  - [TODO Tasks](#todo-tasks)
+  - [Stacks](#stacks)
+  - [Build Setup](#build-setup)
+  - [Capture](#capture)
+    - [Home](#home)
+    - [Checkout](#checkout)
+    - [CRUD Product](#crud-product)
+    - [CRUD Category](#crud-category)
+    - [CRUD User](#crud-user)
+    - [Recent History](#recent-history)
+    - [Statistic Income and Orders](#statistic-income-and-orders)
 
-### `npm test`
+## TODO Tasks
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [x] CRUD Products via web
+- [x] CRUD Categories via web
+- [x] CRUD Users via web
+- [x] Login and authentication with JWT
+- [x] Filtering product by name and category and etc.
+- [x] Sorting product by newest name and etc.
+- [x] Data Pagination
+- [x] Data Reactive
+- [x] Cart item stored in local storage with redux
+- [x] History orders and income by daily, weekly, monthly and yearly
+- [x] Statistic income and orders
 
-### `npm run build`
+## Stacks
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- ReactJS
+- Redux
+- Ant Design
+- React-ChartJs-2
+- Axios
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## Build Setup
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone repository
+   `$ git clone https://github.com/muhammadluth/point-of-sales-Frontend.git`
 
-### `npm run eject`
+2. Install depedencies
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+# with npm
+$ npm install
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# or with yarn
+$ yarn install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+3. Setup your environment variable in `.env` files (if not exists, create your own).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```env
+REACT_APP_API_BASEURL = http://localhost:3500
 
-## Learn More
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4. Available scripts
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+# start development server
+$ npm start
 
-### Code Splitting
+# built to production mode
+$ npm build
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Capture
 
-### Analyzing the Bundle Size
+### Home
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+[![View Home](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/home.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/home.png)
 
-### Making a Progressive Web App
+### Checkout
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+[![View Checkout](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/checkout.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/checkout.png)
 
-### Advanced Configuration
+### CRUD Product
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+[![View CRUD product](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/crud-product.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/crud-product.png)
 
-### Deployment
+### CRUD Category
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+[![View CRUD product](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/crud-category.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/crud-category.png)
 
-### `npm run build` fails to minify
+### CRUD User
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+[![View CRUD product](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/crud-user.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/crud-user.png)
+
+### Recent History
+
+[![View CRUD product](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/history.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/history.png)
+
+### Statistic Income and Orders
+
+[![View CRUD product](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/statistic.png)](https://raw.githubusercontent.com/sutanlab/point-of-sales-frontend/master/capture/statistic.png)
+
+---
+
+Copyright © 2019 by Sutan Gading Fadhillah Nasution

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { REACT_APP_API_BASEURL } from "dotenv";
 
 export const getMenu = test => {
   console.log("action " + test);
@@ -8,7 +9,7 @@ export const getMenu = test => {
       const { search = "", sort = "" } = test;
       axios
         .get(
-          `http://localhost:3500/api/v1/product?sort=${sort}&search=${search}`
+          `${process.env.REACT_APP_API_BASEURL}/api/v1/product?sort=${sort}&search=${search}`
         )
         .then(result => resolve(result))
         .catch(error => reject(error));
