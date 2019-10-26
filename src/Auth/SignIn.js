@@ -57,7 +57,7 @@ class SignIn extends React.Component {
         if (res.data.success === 200) {
           localStorage.setItem("user", `${res.data.username}`);
           // localStorage.setItem("expire_at", expire_at);
-          localStorage.setItem("token", `Bearer: ${res.data.token}`);
+          localStorage.setItem("token", `${res.data.token}`);
           window.location.href = "http://localhost:3000/dashboard";
           alert("Masuk");
         } else {

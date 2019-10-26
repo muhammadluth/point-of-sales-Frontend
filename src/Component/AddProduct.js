@@ -21,8 +21,8 @@ import { getMenu } from "../Public/Redux/Actions/Menu";
 import Axios from "axios";
 
 const { Column } = Table;
-
 const { Header, Sider } = Layout;
+const { Option } = Select;
 
 class AddProduct extends React.Component {
   constructor(props) {
@@ -80,11 +80,16 @@ class AddProduct extends React.Component {
     this.setState({ description: value });
   }
   setImage(e) {
-    let value = e.target.value;
+    let value = e.target.files[0];
     this.setState({ image: value });
   }
   setCategory(e) {
     let value = e.target.value;
+    // {
+    //   if (value == "Makanan") value == 9;
+    //   if (value == "Minuman") value == 10;
+    //   if (value == "Jajanan") value == 11;
+    // }
     this.setState({ category: value });
   }
   setPrice(e) {
@@ -101,26 +106,27 @@ class AddProduct extends React.Component {
       ...this.state
     };
 
-    console.log(name, description, image, category, price, qty);
-    Axios.post(
-      "http://localhost:3500/api/v1/product/",
-      {
-        name: name,
-        description: description,
-        image: image,
-        category_id: category,
-        price: price,
-        qty: qty
+    const pd = new FormData();
+    pd.append("name", name);
+    pd.append("description", description);
+    pd.append("image", image);
+    pd.append("category_id", category);
+    pd.append("price", price);
+    pd.append("qty", qty);
+
+    console.log(pd);
+    Axios.post("http://localhost:3500/api/v1/product/", pd, {
+      headers: {
+        authorization: `${localStorage.getItem("token")}`
       }
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("token")
-      //   }
-      // }
-    ).then(res => {
-      console.log(res);
-      // window.location.href = "/adddata";
-    });
+    })
+      .then(res => {
+        console.log(res);
+        window.location.href = "http://localhost:3000/adddata";
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
   };
   toggle = () => {
     this.setState({
@@ -133,6 +139,13 @@ class AddProduct extends React.Component {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
     window.location.href = "http://localhost:3000/";
+  }
+  handleDelete(id) {
+    Axios.delete(`http://localhost:3500/api/v1/product/${id}`, {
+      headers: {
+        Authorization: `${localStorage.getItem("token")}`
+      }
+    });
   }
 
   render() {
@@ -237,21 +250,30 @@ class AddProduct extends React.Component {
                     </Form.Item>
                     <Form.Item label="Upload Image">
                       <Input
+                        placeholder="I'm the content"
                         name="image"
                         type="file"
                         onChange={e => this.setImage(e)}
                       />
                     </Form.Item>
-
                     <Form.Item
                       label="Category"
                       hasFeedback
                       validateStatus="success"
                     >
                       <Input
-                        type="select"
+                        name="category"
                         onChange={e => this.setCategory(e)}
                       ></Input>
+                      {/* <Select
+                        defaultValue="9"
+                        style={{ width: 200 }}
+                        onChange={e => this.setCategory(e)}
+                      >
+                        <Option value="9">Makanan</Option>
+                        <Option value="10">Minuman</Option>
+                        <Option value="11">Jajanan</Option>
+                      </Select> */}
                     </Form.Item>
                     <Form.Item
                       label="Price"
@@ -316,7 +338,11 @@ class AddProduct extends React.Component {
 
                         <Divider type="vertical" />
                         <a>
-                          <Icon type="delete" style={{ color: "red" }} />
+                          <Icon
+                            type="delete"
+                            style={{ color: "red" }}
+                            onClick={() => this.handleDelete()}
+                          />
                         </a>
                       </span>
                     )}

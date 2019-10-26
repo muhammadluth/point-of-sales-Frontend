@@ -15,10 +15,9 @@ import {
 import "../Assets/Header.css";
 import ConvertRupiah from "rupiah-format";
 import Axios from "axios";
-import { isUserWhitespacable } from "@babel/types";
 
 const { Text } = Typography;
-const { Column, ColumnGroup } = Table;
+const { Column } = Table;
 
 class Carts extends Component {
   constructor(props) {
@@ -85,15 +84,16 @@ class Carts extends Component {
           user: cashier,
           orders: item.name,
           amount: item.price * item.qty
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token")
+          }
         }
-        // {
-        //   headers: {
-        //     Authorization: localStorage.getItem("token")
-        //   }
-        // }
       ).then(res => {
         console.log(res);
         console.log(item);
+        window.location.href = "/dashboard";
       });
     });
   }

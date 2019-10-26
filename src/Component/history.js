@@ -251,7 +251,7 @@ class graph extends React.Component {
                     style={{ width: 120 }}
                     onChange={this.getRevenue}
                   >
-                    <Option value="day">Day</Option>
+                    <Option value="week">Week</Option>
                     <Option value="month">Month</Option>
                     <Option value="year">Year</Option>
                   </Select>
@@ -270,7 +270,7 @@ class graph extends React.Component {
                     style={{ width: 120 }}
                     onChange={this.getRecentOrder}
                   >
-                    <Option value="day">Day</Option>
+                    <Option value="week">Week</Option>
                     <Option value="month">Month</Option>
                     <Option value="year">Year</Option>
                   </Select>
