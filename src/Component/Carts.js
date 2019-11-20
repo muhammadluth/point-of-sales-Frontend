@@ -12,9 +12,9 @@ import {
   Input,
   Form
 } from "antd";
-import "../Assets/Header.css";
+import "../Assets/style.css";
 import ConvertRupiah from "rupiah-format";
-import Axios from "axios";
+import Http from "../Public/Utils/Http";
 
 const { Text } = Typography;
 const { Column } = Table;
@@ -26,11 +26,8 @@ class Carts extends Component {
       data: [],
       cart: [],
       visible: false,
-      total: 0,
-      name: ""
+      total: 0
     };
-    // this.addCart = this.addCart.bind(this);
-    // this.calculateTotal = this.calculateTotal.bind(this);
     this.handleCheckOut = this.handleCheckOut.bind(this);
   }
 
@@ -77,8 +74,8 @@ class Carts extends Component {
     console.log(receipt);
     this.props.cart.map((item, index) => {
       console.log(item);
-      Axios.post(
-        "http://localhost:3500/api/v1/history/",
+      Http.post(
+        `/api/v1/order/`,
         {
           invoices: receipt,
           user: cashier,
@@ -97,71 +94,6 @@ class Carts extends Component {
       });
     });
   }
-
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-
-  //     quantity: 1,
-  //     id: this.props.id,
-  //     name: this.props.name,
-  //     description: this.props.description,
-  //     price: this.props.price,
-  //     image: this.props.image
-  //   };
-  //   this.removeCart = this.removeCart.bind(this);
-  //   this.addCart = this.addCart.bind(this);
-  //   this.reduceQuantity = this.reduceQuantity.bind(this);
-  // }
-
-  // async addCart() {
-  //   if (this.state.quantity > 0) {
-  //     await this.setState({
-  //       id: this.props.id,
-  //       qty: this.state.quantity + 1,
-  //       name: this.props.name,
-  //       description: this.props.description,
-  //       price: this.props.price,
-  //       image: this.props.image
-  //     });
-  //   } else {
-  //     await this.setState({
-  //       qty: 1,
-  //       id: this.props.id,
-  //       name: this.props.name,
-  //       price: this.props.price,
-  //       image: this.props.image
-  //     });
-  //   }
-  //   await this.props.handleTotal(this.state.price);
-  //   await this.props.handleCart(this.state);
-  // }
-
-  // async reduceQuantity() {
-  //   await this.setState({
-  //     id: this.props.id,
-  //     qty: this.state.quantity - 1,
-  //     name: this.props.name,
-  //     description: this.props.description,
-  //     price: this.props.price,
-  //     image: this.props.image
-  //   });
-  //   await this.props.handleTotal(-this.state.price);
-  //   await this.props.handleCart(this.state);
-  // }
-
-  // async removeCart() {
-  //   await this.setState({
-  //     qty: 0,
-  //     id: this.props.id,
-  //     name: this.props.name,
-  //     description: this.props.description,
-  //     price: this.props.price,
-  //     image: this.props.image
-  //   });
-  //   await this.props.handleRemove(this.props.id);
-  // }
-
   render() {
     const { cart } = this.props;
     console.log(cart);
@@ -174,7 +106,7 @@ class Carts extends Component {
         {cart.map(item => (
           <Card title={item.name}>
             <img
-              src={`http://localhost:3500/` + item.image}
+              src={`${process.env.REACT_APP_API_BASEURL}/` + item.image}
               style={{ width: "100%", height: "100%" }}
             />
             <h4 style={{ marginTop: "5px" }}>{item.category}</h4>
@@ -184,6 +116,7 @@ class Carts extends Component {
             <Button.Group size="small">
               <Button
                 type="primary"
+                href="#"
                 onClick={() => (item.qty <= 0 ? this.false : (item.qty -= 1))}
                 disabled={this.state.quantity < 1}
               >
@@ -201,26 +134,44 @@ class Carts extends Component {
               </span>
               <Button
                 type="primary"
+                href="#"
                 onClick={() =>
-                  item.qty >= item.qty ? this.false : (item.qty += 1)
+                  item.qty >= item.quantity ? this.false : (item.qty += 1)
                 }
               >
                 <Icon type="plus" />
               </Button>
             </Button.Group>
-            {/* <Button type="primary" onClick={this.removeCart}>
-                <Icon type="p" />
-            </Button> */}
+            <Button
+              className="btn-remove-cart"
+              size="default"
+              type="danger"
+              onClick={this.props.removeCart}
+            >
+              <Icon type="delete" />
+            </Button>
           </Card>
         ))}
-        <Text>
-          TOTAL :
-          {ConvertRupiah.convert(cart.reduce((a, c) => a + c.price * c.qty, 0))}
-        </Text>
-        <p>*Belum termasuk PPN</p>
-        <Button type="primary" block onClick={this.showCheckout}>
-          CHECKOUT
-        </Button>
+        <div style={{ bottom: 0 }}>
+          <Text>
+            TOTAL :
+            {ConvertRupiah.convert(
+              cart.reduce((a, c) => a + c.price * c.qty, 0)
+            )}
+          </Text>
+          <p>*Belum termasuk PPN</p>
+          <Button type="primary" block onClick={this.showCheckout}>
+            CHECKOUT
+          </Button>
+          <Button
+            type="danger"
+            block
+            style={{ marginTop: "5px" }}
+            onClick={this.props.cancel}
+          >
+            CANCEL
+          </Button>
+        </div>
         <Modal
           title="CHECKOUT"
           visible={this.state.visible}

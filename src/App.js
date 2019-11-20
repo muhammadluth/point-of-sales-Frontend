@@ -4,9 +4,10 @@ import { Provider } from "react-redux";
 import store from "./Public/Redux/store";
 import "./App.css";
 import SignIn from "./Auth/SignIn";
-import AddProduct from "./Component/AddProduct";
-import Headers from "./Screens/Headers";
-import history from "./Component/history";
+import SignUp from "./Auth/SignUp";
+import Manage from "./Screens/Manage";
+import Dashboard from "./Screens/Dashboard";
+import History from "./Screens/History";
 
 class App extends Component {
   render() {
@@ -14,9 +15,10 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <Route exact path="/" component={SignIn} />
-          <Route exact path="/dashboard" component={Headers} />
-          <Route excat path="/adddata" component={AddProduct} />
-          <Route excat path="/history" component={history} />
+          <Route exact path="/SignUp" component={SignUp} />
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route excat path="/manage" component={Manage} />
+          <Route excat path="/history" component={History} />
         </Router>
       </Provider>
     );

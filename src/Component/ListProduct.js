@@ -49,7 +49,7 @@ class ListProduct extends Component {
           cover={
             <img
               alt="example"
-              src={"http://localhost:3500/" + item.image}
+              src={`${process.env.REACT_APP_API_BASEURL}/` + item.image}
               style={{ width: "100%", height: "150px" }}
             />
           }
