@@ -1,6 +1,6 @@
 import React from "react";
-import Axios from "axios";
 import { Form, Input, Button, Row, Col, Typography, Card } from "antd";
+import Http from "../Public/Utils/Http";
 import Title from "antd/lib/typography/Title";
 import { Link } from "react-router-dom";
 import "../Assets/style.css";
@@ -37,19 +37,19 @@ class SignUp extends React.Component {
     const emails = this.state.email;
     const passwords = this.state.password;
 
-    Axios.post(`${process.env.REACT_APP_API_BASEURL}/api/v1/users/register`, {
+    Http.post(`/api/v1/users/register`, {
       username: usernames,
       email: emails,
       password: passwords
     })
       .then(res => {
         console.log(res);
-        window.location.href = "http://localhost:3000/";
+        window.location.href = "/";
         alert("Masuk");
       })
       .catch(err => {
         console.log(err);
-        window.location.href = "http://localhost:3000/SignUp";
+        window.location.href = "/SignUp";
         alert("Please, fill in your personal");
       });
   }

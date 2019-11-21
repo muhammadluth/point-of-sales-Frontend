@@ -9,7 +9,8 @@ import {
   Input,
   Pagination,
   Typography,
-  Radio
+  Alert,
+  Spin
 } from "antd";
 import "../Component/ListProduct";
 import Carts from "../Component/Carts";
@@ -38,7 +39,8 @@ class Bodys extends React.Component {
       limit: "6",
       page: "1",
       allPage: [],
-      sortdesc: ""
+      sortdesc: "",
+      loading: true
     };
     this.handleCart = this.handleCart.bind(this);
   }
@@ -79,7 +81,7 @@ class Bodys extends React.Component {
       })
     );
     console.log(this.props.data.menuList);
-    this.setState({ data: this.props.data.menuList });
+    this.setState({ data: this.props.data.menuList, loading: false });
   }
 
   getPage = async value => {
@@ -160,10 +162,24 @@ class Bodys extends React.Component {
                 </Col>
                 <Col span={18}>
                   <Row>
-                    <ListProduct
-                      product={this.state.data}
-                      handleCart={this.handleCart}
-                    />
+                    {this.state.loading ? (
+                      <div>
+                        <Spin tip="Loading...">
+                          <Alert
+                            message="Loadig Data"
+                            description="Please wait to loading data"
+                            type="info"
+                          />
+                        </Spin>
+                      </div>
+                    ) : (
+                      <div>
+                        <ListProduct
+                          product={this.state.data}
+                          handleCart={this.handleCart}
+                        />
+                      </div>
+                    )}
                   </Row>
                 </Col>
 

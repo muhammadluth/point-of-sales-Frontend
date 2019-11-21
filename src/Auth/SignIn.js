@@ -1,6 +1,6 @@
 import React from "react";
-import Axios from "axios";
 import { Form, Input, Button, Row, Col, Typography, Card } from "antd";
+import Http from "../Public/Utils/Http";
 import Title from "antd/lib/typography/Title";
 import { Link } from "react-router-dom";
 import "../Assets/style.css";
@@ -30,7 +30,7 @@ class SignIn extends React.Component {
     const emails = this.state.email;
     const passwords = this.state.password;
 
-    Axios.post(`${process.env.REACT_APP_API_BASEURL}/api/v1/users/login`, {
+    Http.post(`/api/v1/users/login`, {
       email: emails,
       password: passwords
     })
@@ -39,10 +39,10 @@ class SignIn extends React.Component {
         if (res.data.success === 200) {
           localStorage.setItem("user", `${res.data.username}`);
           localStorage.setItem("token", `${res.data.token}`);
-          window.location.href = "http://localhost:3000/dashboard";
+          window.location.href = "/dashboard";
           alert("Masuk");
         } else {
-          window.location.href = "http://localhost:3000/";
+          window.location.href = "/";
           alert("Gagal");
         }
       })

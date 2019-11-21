@@ -20,7 +20,7 @@ export default class Navigation extends React.Component {
   handleLogout() {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
-    window.location.href = "http://localhost:3000/";
+    window.location.href = "/";
   }
 
   render() {

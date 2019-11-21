@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { Line } from "react-chartjs-2";
 import "../Assets/style.css";
-import Axios from "axios";
+import Http from "../Public/Utils/Http";
 import ConvertRupiah from "rupiah-format";
 import Navigation from "../Component/Navigation";
 import Header from "../Component/Header";
@@ -20,10 +20,6 @@ import Header from "../Component/Header";
 const { Option } = Select;
 const { Column } = Table;
 const { Title, Text } = Typography;
-
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
 
 export default class History extends React.Component {
   constructor(props) {
@@ -50,9 +46,7 @@ export default class History extends React.Component {
 
   // Card
   getCountOrder = async () => {
-    await Axios.get(
-      `${process.env.REACT_APP_API_BASEURL}/api/v1/order/allorder`
-    )
+    await Http.get(`/api/v1/order/allorder`)
       .then(result => {
         let growthCount =
           ((result.data.data[0].daynow - result.data.data[0].yesterday) /
@@ -83,9 +77,7 @@ export default class History extends React.Component {
   // grafik
   getRevenue = async event => {
     let data = event;
-    Axios.get(
-      `${process.env.REACT_APP_API_BASEURL}/api/v1/order/revenue?order=${data}`
-    )
+    Http.get(`/api/v1/order/revenue?order=${data}`)
       .then(result => {
         this.setState({
           data: result.data.data,
@@ -100,9 +92,7 @@ export default class History extends React.Component {
   // show recent order
   getRecentOrder = async event => {
     let data = event;
-    await Axios.get(
-      `${process.env.REACT_APP_API_BASEURL}/api/v1/order/recent?order=${data}`
-    )
+    await Http.get(`/api/v1/order/recent?order=${data}`)
       .then(result => {
         this.setState({
           recentOrder: result.data.data
@@ -112,19 +102,6 @@ export default class History extends React.Component {
         console.log(err);
       });
   };
-
-  handleLogout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    window.location.href = "http://localhost:3000/";
-  }
-
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
-  state;
 
   render() {
     console.log(this.state.data);
