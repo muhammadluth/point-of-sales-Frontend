@@ -34,7 +34,8 @@ class Manage extends React.Component {
       qty: "",
       allPage: [],
       Edit: [],
-      visible: false
+      visible: false,
+      loading: true
     };
   }
   componentDidMount() {
@@ -48,7 +49,7 @@ class Manage extends React.Component {
         sort: this.state.sort
       })
     );
-    this.setState({ data: this.props.data.menuList });
+    this.setState({ data: this.props.data.menuList, loading: false });
   }
   showModal = () => {
     this.setState({
@@ -203,6 +204,7 @@ class Manage extends React.Component {
               <TableData
                 DataTable={this.state.data}
                 handleDelete={this.handleDelete}
+                loading={this.state.loading}
               />
             </div>
           </div>

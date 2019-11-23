@@ -29,7 +29,12 @@ export default class DataTable extends React.Component {
     const { DataTable } = this.props;
     return (
       <div>
-        <Table dataSource={DataTable} key={DataTable} rowKey="id">
+        <Table
+          loading={this.props.loading}
+          dataSource={DataTable}
+          key={DataTable}
+          rowKey="id"
+        >
           <Column title="Product" dataIndex="name" key="name" />
           <Column
             title="Description"

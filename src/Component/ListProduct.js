@@ -18,33 +18,14 @@ class ListProduct extends Component {
       price: "",
       qty: ""
     };
-    // this.addCart = this.addCart.bind(this);
-    // this.calculateTotal = this.calculateTotal.bind(this);
   }
 
-  // async addCart() {
-  //   if (this.state.qty > 0) {
-  //     this.state.qty += 1;
-  //   } else {
-  //     await this.setState({
-  //       qty: 1,
-  //       id: this.props.id,
-  //       name: this.props.name,
-  //       category: this.props.category,
-  //       description: this.props.description,
-  //       price: this.props.price,
-  //       image: this.props.image
-  //     });
-  //     console.log(this.state);
-  //   }
-  //   await this.props.handleCart(this.state);
-  //   this.props.handleTotal(this.props.price);
-  // }
   render() {
     console.log(this.props);
     const ListProduct = this.props.product.map(item => (
       <Col span={8} style={{ padding: "8px" }}>
         <Card
+          loading={this.props.loading}
           style={{ width: "100%", height: "100%" }}
           cover={
             <img

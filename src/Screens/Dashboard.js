@@ -150,7 +150,6 @@ class Bodys extends React.Component {
                     >
                       <Option value="name">Name</Option>
                       <Option value="price">Price</Option>
-                      <Option value="category">Category</Option>
                     </Select>
                   </div>
                 </Col>
@@ -164,7 +163,7 @@ class Bodys extends React.Component {
                     >
                       <Option value="name">Name</Option>
                       <Option value="price">Price</Option>
-                      <Option value="created_at">Latents</Option>
+                      <Option value="created_at">Latest</Option>
                     </Select>
                   </div>
                 </Col>
@@ -197,6 +196,7 @@ class Bodys extends React.Component {
                     ) : (
                       <div>
                         <ListProduct
+                          loading={this.state.loading}
                           product={this.state.data}
                           handleCart={this.handleCart}
                         />
