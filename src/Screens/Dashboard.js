@@ -39,7 +39,8 @@ class Bodys extends React.Component {
       limit: "6",
       page: "1",
       allPage: [],
-      sortdesc: "",
+      type: "",
+
       loading: true
     };
     this.handleCart = this.handleCart.bind(this);
@@ -77,7 +78,8 @@ class Bodys extends React.Component {
     await this.props.dispatch(
       getMenu({
         search: this.state.search,
-        sort: this.state.sort
+        sort: this.state.sort,
+        type: this.state.type
       })
     );
     console.log(this.props.data.menuList);
@@ -96,9 +98,14 @@ class Bodys extends React.Component {
     return this.fetchData(search, this.state.sort);
   };
 
-  getSort = async value => {
+  getSortASC = async value => {
     let sort = value;
-    await this.setState({ sort });
+    await this.setState({ sort, type: "ASC" });
+    return this.fetchData(sort, this.state.search);
+  };
+  getSortDESC = async value => {
+    let sort = value;
+    await this.setState({ sort, type: "DESC" });
     return this.fetchData(sort, this.state.search);
   };
   cancel = e => {
@@ -133,12 +140,13 @@ class Bodys extends React.Component {
               }}
             >
               <Row>
-                <Col span={2}>
+                <Col span={4}>
                   <div style={{ textAlign: "left", marginLeft: "10px" }}>
+                    <Text style={{ marginRight: 5 }}>ASC : </Text>
                     <Select
                       defaultValue="name"
                       style={{ width: 120 }}
-                      onChange={this.getSort}
+                      onChange={this.getSortASC}
                     >
                       <Option value="name">Name</Option>
                       <Option value="price">Price</Option>
@@ -146,8 +154,22 @@ class Bodys extends React.Component {
                     </Select>
                   </div>
                 </Col>
+                <Col span={4}>
+                  <div style={{ textAlign: "left", marginLeft: "10px" }}>
+                    <Text style={{ marginRight: 5 }}>DESC : </Text>
+                    <Select
+                      defaultValue="name"
+                      style={{ width: 120 }}
+                      onChange={this.getSortDESC}
+                    >
+                      <Option value="name">Name</Option>
+                      <Option value="price">Price</Option>
+                      <Option value="created_at">Latents</Option>
+                    </Select>
+                  </div>
+                </Col>
 
-                <Col span={16}>
+                <Col span={10}>
                   <div style={{ textAlign: "right", marginRight: 10 }}>
                     <Search
                       placeholder="Food Gathering"
