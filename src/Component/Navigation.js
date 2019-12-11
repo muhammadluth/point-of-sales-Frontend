@@ -19,7 +19,7 @@ export default class Navigation extends React.Component {
 
   handleLogout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("email");
+    localStorage.removeItem("user");
     window.location.href = "/";
   }
 

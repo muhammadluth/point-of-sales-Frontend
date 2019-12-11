@@ -84,7 +84,7 @@ class Carts extends Component {
         },
         {
           headers: {
-            Authorization: localStorage.getItem("token")
+            authorization: `${localStorage.getItem("token")}`
           }
         }
       ).then(res => {

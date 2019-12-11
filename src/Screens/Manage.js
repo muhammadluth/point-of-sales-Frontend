@@ -103,8 +103,6 @@ class Manage extends React.Component {
     pd.append("category_id", category);
     pd.append("price", price);
     pd.append("qty", qty);
-
-    console.log(category);
     Http.post(`/api/v1/product/`, pd, {
       headers: {
         authorization: `${localStorage.getItem("token")}`
@@ -122,7 +120,7 @@ class Manage extends React.Component {
     let id = dataIndex;
     await Http.delete(`/api/v1/product/${id}`, {
       headers: {
-        Authorization: `${localStorage.getItem("token")}`
+        authorization: `${localStorage.getItem("token")}`
       }
     }).then(res => {
       window.location.href = "/manage";
@@ -130,6 +128,7 @@ class Manage extends React.Component {
   }
 
   render() {
+    console.log(localStorage.getItem("token"));
     const { visible } = this.state;
     return (
       <Layout className="layout">
